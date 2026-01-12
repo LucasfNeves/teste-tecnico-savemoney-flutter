@@ -40,6 +40,8 @@ dependencies:
   bloc: ^9.2.0
   equatable: ^2.0.8
   flutter_secure_storage: ^9.2.2
+  fluttertoast: ^9.0.0
+  top_snackbar_flutter: ^3.3.0
 
 dev_dependencies:
   flutter_test:

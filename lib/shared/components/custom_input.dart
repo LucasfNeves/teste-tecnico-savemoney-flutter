@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:teste_create_flutter/core/theme/app_theme.dart';
+import 'package:teste_create_flutter/shared/utils/validators_custom_input.dart';
 
 enum InputType { text, email, password, number }
 
 class CustomInput extends StatefulWidget {
   final String label;
   final InputType type;
-  final String? Function(String?)? validator;
   final TextEditingController? controller;
 
   const CustomInput({
     super.key,
     required this.label,
     this.type = InputType.text,
-    this.validator,
     this.controller,
   });
 
@@ -58,8 +57,22 @@ class _CustomInputState extends State<CustomInput> {
       ),
       keyboardType: _getKeyboardType(),
       obscureText: widget.type == InputType.password ? _obscureText : false,
-      validator: widget.validator,
+      validator: _getDefaultValidator,
     );
+  }
+
+  String? _getDefaultValidator(String? value) {
+    switch (widget.type) {
+      case InputType.email:
+        return ValidatorsCustomInput.email(value);
+      case InputType.password:
+        return ValidatorsCustomInput.password(value);
+      case InputType.text:
+      case InputType.number:
+        return ValidatorsCustomInput.required(value);
+      default:
+        return null;
+    }
   }
 
   TextInputType _getKeyboardType() {
