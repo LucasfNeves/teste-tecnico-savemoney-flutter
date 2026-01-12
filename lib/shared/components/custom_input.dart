@@ -1,0 +1,77 @@
+import 'package:flutter/material.dart';
+import 'package:teste_create_flutter/core/theme/app_theme.dart';
+
+enum InputType { text, email, password, number }
+
+class CustomInput extends StatefulWidget {
+  final String label;
+  final InputType type;
+  final String? Function(String?)? validator;
+  final TextEditingController? controller;
+
+  const CustomInput({
+    super.key,
+    required this.label,
+    this.type = InputType.text,
+    this.validator,
+    this.controller,
+  });
+
+  @override
+  State<CustomInput> createState() => _CustomInputState();
+}
+
+class _CustomInputState extends State<CustomInput> {
+  bool _obscureText = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: widget.controller,
+      decoration: InputDecoration(
+        labelText: widget.label,
+        labelStyle: TextStyle(color: AppTheme.textLabel),
+        constraints: const BoxConstraints(minHeight: 56),
+        border: OutlineInputBorder(
+          borderSide: BorderSide(color: AppTheme.borderColor, width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: AppTheme.borderColor, width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        suffixIcon: widget.type == InputType.password
+            ? Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _obscureText = !_obscureText;
+                    });
+                  },
+                  child: Icon(
+                      _obscureText ? Icons.visibility : Icons.visibility_off,
+                      color: AppTheme.textSecondary),
+                ),
+              )
+            : null,
+      ),
+      keyboardType: _getKeyboardType(),
+      obscureText: widget.type == InputType.password ? _obscureText : false,
+      validator: widget.validator,
+    );
+  }
+
+  TextInputType _getKeyboardType() {
+    switch (widget.type) {
+      case InputType.email:
+        return TextInputType.emailAddress;
+      case InputType.password:
+        return TextInputType.visiblePassword;
+      case InputType.text:
+        return TextInputType.text;
+      case InputType.number:
+        return TextInputType.number;
+    }
+  }
+}
