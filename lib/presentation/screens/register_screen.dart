@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:teste_create_flutter/core/theme/app_theme.dart';
+import 'package:teste_create_flutter/presentation/screens/login_screen.dart';
 import 'package:teste_create_flutter/shared/components/custom_input.dart';
 import 'package:teste_create_flutter/shared/components/title_subtitle_centralized.dart';
 import 'package:teste_create_flutter/shared/layouts/login_register_layout.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,12 @@ class _LoginScreenState extends State<LoginScreen> {
               subtitle: 'Entre com as suas credenciais',
             ),
             const SizedBox(height: 52),
+            CustomInput(
+              label: 'Nome Completo',
+              type: InputType.text,
+              controller: _nameController,
+            ),
+            const SizedBox(height: 20),
             CustomInput(
               label: 'E-mail',
               type: InputType.email,
@@ -49,7 +57,10 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 40),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/undefined');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
               },
               child: RichText(
                 text: TextSpan(

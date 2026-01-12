@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:teste_create_flutter/core/routes/app_routes.dart';
+import 'package:teste_create_flutter/core/routes/route_generator.dart';
 import 'package:teste_create_flutter/core/theme/app_theme.dart';
 import 'package:teste_create_flutter/presentation/screens/login_screen.dart';
 
@@ -14,7 +16,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'SaveMoney',
       theme: AppTheme.lightTheme,
-      home: const LoginScreen(),
+      initialRoute: AppRoutes.login,
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }
