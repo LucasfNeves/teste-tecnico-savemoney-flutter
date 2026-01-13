@@ -26,6 +26,7 @@ class PhoneInputWithAreaCode extends StatefulWidget {
 class _PhoneInputWithAreaCodeState extends State<PhoneInputWithAreaCode> {
   late TextEditingController _areaCodeController;
   late TextEditingController _numberController;
+  bool _hasError = false; // Adicione esta variável
 
   @override
   void initState() {
@@ -57,33 +58,45 @@ class _PhoneInputWithAreaCodeState extends State<PhoneInputWithAreaCode> {
         ),
         const SizedBox(height: 8),
         Row(
+          crossAxisAlignment:
+              CrossAxisAlignment.start, // Importante para alinhamento
           children: [
-            SizedBox(
-              width: 80,
-              child: TextFormField(
-                controller: _areaCodeController,
-                decoration: InputDecoration(
-                  hintText: '11',
-                  constraints: const BoxConstraints(minHeight: 56),
-                  border: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: AppTheme.borderColor, width: 1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: AppTheme.borderColor, width: 1),
-                    borderRadius: BorderRadius.circular(8),
+            Column(
+              children: [
+                SizedBox(
+                  width: 80,
+                  child: TextFormField(
+                    controller: _areaCodeController,
+                    decoration: InputDecoration(
+                      hintText: '11',
+                      constraints: const BoxConstraints(minHeight: 56),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color:
+                                _hasError ? Colors.red : AppTheme.borderColor,
+                            width: 1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color:
+                                _hasError ? Colors.red : AppTheme.borderColor,
+                            width: 1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(2),
+                    ],
+                    onChanged: (_) => widget.onChanged?.call(
+                        _areaCodeController.text, _numberController.text),
                   ),
                 ),
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(2),
-                ],
-                onChanged: (_) => widget.onChanged
-                    ?.call(_areaCodeController.text, _numberController.text),
-              ),
+                const SizedBox(
+                    height: 20), // Espaço para simular a mensagem de erro
+              ],
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -105,6 +118,17 @@ class _PhoneInputWithAreaCodeState extends State<PhoneInputWithAreaCode> {
                   ),
                 ),
                 keyboardType: TextInputType.phone,
+                validator: widget.isRequired
+                    ? (value) {
+                        bool hasError = _areaCodeController.text.isEmpty ||
+                            value == null ||
+                            value.isEmpty;
+                        setState(() {
+                          _hasError = hasError;
+                        });
+                        return hasError ? 'O telefone é obrigatório.' : null;
+                      }
+                    : null,
                 onChanged: (value) {
                   _formatPhoneNumber(value);
                   widget.onChanged
