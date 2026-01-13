@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:teste_create_flutter/core/theme/app_theme.dart';
-import 'package:teste_create_flutter/presentation/screens/login_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:teste_create_flutter/presentation/blocs/register/register_bloc.dart';
+import 'package:teste_create_flutter/presentation/blocs/register/register_event.dart';
+import 'package:teste_create_flutter/presentation/blocs/register/register_state.dart';
 import 'package:teste_create_flutter/shared/components/custom_input.dart';
+import 'package:teste_create_flutter/shared/components/phone_input_with_area_code.dart';
+import 'package:teste_create_flutter/shared/components/primary_button.dart';
+import 'package:teste_create_flutter/shared/components/navigation_text.dart';
 import 'package:teste_create_flutter/shared/components/title_subtitle_centralized.dart';
 import 'package:teste_create_flutter/shared/layouts/login_register_layout.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -13,74 +20,115 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _nameController = TextEditingController();
-
+  List<Map<String, dynamic>> _phones = [];
   @override
   Widget build(BuildContext context) {
-    return LoginRegisterLayout(
-      child: Form(
-        key: GlobalKey<FormState>(),
-        child: Column(
-          children: [
-            const TitleSubtitleCentralized(
-              title: 'Acessar conta',
-              subtitle: 'Entre com as suas credenciais',
-            ),
-            const SizedBox(height: 52),
-            CustomInput(
-              label: 'Nome Completo',
-              type: InputType.text,
-              controller: _nameController,
-            ),
-            const SizedBox(height: 20),
-            CustomInput(
-              label: 'E-mail',
-              type: InputType.email,
-              controller: _emailController,
-            ),
-            const SizedBox(height: 20),
-            CustomInput(
-              label: 'Senha',
-              type: InputType.password,
-              controller: _passwordController,
-            ),
-            const SizedBox(height: 40),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 56),
-              ),
-              onPressed: () {},
-              child: const Text('Entrar'),
-            ),
-            const SizedBox(height: 40),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                );
-              },
-              child: RichText(
-                text: TextSpan(
-                  text: 'Não tem cadastro?',
-                  style: TextStyle(color: AppTheme.textSecondary, fontSize: 16),
-                  children: [
-                    TextSpan(
-                      text: ' Crie sua conta',
-                      style: TextStyle(
-                          color: AppTheme.primaryPurple,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
+    return BlocProvider(
+      create: (context) => RegisterBloc(),
+      child: BlocListener<RegisterBloc, RegisterState>(
+        listener: (context, state) {
+          if (state is RegisterSuccess) {
+            showTopSnackBar(
+              Overlay.of(context),
+              CustomSnackBar.success(
+                  message: "Cadastro realizado com sucesso!"),
+            );
+            Navigator.pushReplacementNamed(context, '/login');
+          } else if (state is RegisterError) {
+            showTopSnackBar(
+              Overlay.of(context),
+              CustomSnackBar.error(message: state.message),
+            );
+          }
+        },
+        child: LoginRegisterLayout(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                const TitleSubtitleCentralized(
+                  title: 'Criar conta',
+                  subtitle: 'Preencha os dados para criar sua conta',
                 ),
-              ),
+                const SizedBox(height: 52),
+                CustomInput(
+                  label: 'Nome Completo',
+                  type: InputType.name,
+                  controller: _nameController,
+                ),
+                const SizedBox(height: 20),
+                CustomInput(
+                  label: 'E-mail',
+                  type: InputType.email,
+                  controller: _emailController,
+                ),
+                const SizedBox(height: 20),
+                CustomInput(
+                  label: 'Senha',
+                  type: InputType.password,
+                  controller: _passwordController,
+                ),
+                const SizedBox(height: 20),
+                PhoneInputWithAreaCode(
+                  label: 'Telefone',
+                  isRequired: true,
+                  onChanged: (areaCode, number) {
+                    setState(() {
+                      _phones = [
+                        {'area_code': areaCode, 'number': number}
+                      ];
+                    });
+                  },
+                ),
+                const SizedBox(height: 40),
+                Builder(
+                  builder: (context) {
+                    final state = context.watch<RegisterBloc>().state;
+
+                    return PrimaryButton(
+                      text: 'Cadastrar',
+                      isLoading: state is RegisterLoading,
+                      onPressed: state is RegisterLoading
+                          ? null
+                          : () {
+                              if (_formKey.currentState!.validate()) {
+                                context.read<RegisterBloc>().add(
+                                      RegisterRequested(
+                                        name: _nameController.text.trim(),
+                                        email: _emailController.text.trim(),
+                                        password: _passwordController.text,
+                                        telephones: _phones,
+                                      ),
+                                    );
+                              }
+                            },
+                    );
+                  },
+                ),
+                const SizedBox(height: 40),
+                NavigationText(
+                  normalText: 'Já tem cadastro?',
+                  highlightText: 'Faça login',
+                  onTap: () =>
+                      Navigator.pushReplacementNamed(context, '/login'),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _nameController.dispose();
+    super.dispose();
   }
 }
