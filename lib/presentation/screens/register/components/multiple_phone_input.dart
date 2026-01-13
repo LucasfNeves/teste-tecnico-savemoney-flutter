@@ -66,17 +66,18 @@ class _MultiplePhoneInputState extends State<MultiplePhoneInput> {
                     ),
                   ),
                   if (index > 0)
-                    SizedBox(
-                      width: 48,
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 40),
-                        child: IconButton(
-                          onPressed: () => _removePhone(index),
-                          icon: Icon(Icons.remove_circle_outline,
-                              color: AppTheme.errorRed),
+                    if (index > 0)
+                      SizedBox(
+                        width: 48,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 23),
+                          child: IconButton(
+                            onPressed: () => _removePhone(index),
+                            icon: Icon(Icons.remove_circle_outline,
+                                color: AppTheme.errorRed),
+                          ),
                         ),
                       ),
-                    ),
                 ],
               ),
             ],
