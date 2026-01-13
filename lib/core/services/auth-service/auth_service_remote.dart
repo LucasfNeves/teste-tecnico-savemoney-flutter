@@ -12,16 +12,4 @@ class AuthServiceRemote implements AuthService {
       'password': password,
     });
   }
-
-  @override
-  Future<void> logout() {
-    // TODO: implement logout
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Response> register(String email, String password) {
-    // TODO: implement register
-    throw UnimplementedError();
-  }
 }

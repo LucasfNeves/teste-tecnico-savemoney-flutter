@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:teste_create_flutter/core/theme/app_theme.dart';
 import 'package:teste_create_flutter/presentation/blocs/auth/auth_bloc.dart';
 import 'package:teste_create_flutter/presentation/blocs/auth/auth_event.dart';
 import 'package:teste_create_flutter/presentation/blocs/auth/auth_state.dart';
 import 'package:teste_create_flutter/shared/components/custom_input.dart';
+import 'package:teste_create_flutter/shared/components/primary_button.dart';
+import 'package:teste_create_flutter/shared/components/navigation_text.dart';
 import 'package:teste_create_flutter/shared/components/title_subtitle_centralized.dart';
 import 'package:teste_create_flutter/shared/layouts/login_register_layout.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -63,55 +63,42 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 40),
               BlocBuilder<AuthBloc, AuthState>(
+                buildWhen: (previous, current) => 
+                    previous.runtimeType != current.runtimeType,
                 builder: (context, state) {
-                  return ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 56),
-                    ),
-                    onPressed: state is AuthLoading
-                        ? null
-                        : () {
-                            if (_formKey.currentState!.validate()) {
-                              context.read<AuthBloc>().add(
-                                    AuthLoginRequested(
-                                      _emailController.text,
-                                      _passwordController.text,
-                                    ),
-                                  );
-                            }
-                          },
-                    child: state is AuthLoading
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text('Entrar'),
+                  return PrimaryButton(
+                    text: 'Entrar',
+                    isLoading: state is AuthLoading,
+                    onPressed: state is AuthLoading ? null : () {
+                      if (_formKey.currentState!.validate()) {
+                        context.read<AuthBloc>().add(
+                              AuthLoginRequested(
+                                _emailController.text.trim(),
+                                _passwordController.text,
+                              ),
+                            );
+                      }
+                    },
                   );
                 },
               ),
               const SizedBox(height: 40),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, '/undefined');
-                },
-                child: RichText(
-                  text: TextSpan(
-                    text: 'Não tem cadastro?',
-                    style:
-                        TextStyle(color: AppTheme.textSecondary, fontSize: 16),
-                    children: [
-                      TextSpan(
-                        text: ' Crie sua conta',
-                        style: TextStyle(
-                            color: AppTheme.primaryPurple,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ),
+              NavigationText(
+                normalText: 'Não tem cadastro?',
+                highlightText: 'Crie sua conta',
+                onTap: () => Navigator.pushNamed(context, '/register'),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }

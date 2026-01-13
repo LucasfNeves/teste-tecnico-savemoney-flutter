@@ -1,10 +1,10 @@
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:teste_create_flutter/core/services/auth-service/auth_service.dart';
 import 'package:teste_create_flutter/core/services/auth-service/auth_service_remote.dart';
 import 'package:teste_create_flutter/core/services/auth-service/token_storage.dart';
 import 'package:teste_create_flutter/presentation/blocs/auth/auth_event.dart';
 import 'package:teste_create_flutter/presentation/blocs/auth/auth_state.dart';
+import 'package:teste_create_flutter/shared/utils/error_handler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
@@ -29,15 +29,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await TokenStorage.saveToken(token);
       emit(const AuthAuthenticated('Login realizado com sucesso'));
     } catch (e) {
-      String errorMessage = 'Erro desconhecido';
-
-      if (e is DioException && e.response != null) {
-        errorMessage = e.response!.data['message'] ??
-            e.response!.data['error'] ??
-            'Erro: ${e.response!.statusCode}';
-      }
-
-      emit(AuthLoginError(errorMessage));
+      emit(AuthLoginError(ErrorHandler.getErrorMessage(e)));
     }
   }
 
