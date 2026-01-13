@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:teste_create_flutter/core/theme/app_theme.dart';
+import 'package:teste_create_flutter/shared/utils/phone_formatter.dart';
 
 class PhoneInputWithAreaCode extends StatefulWidget {
   final String? areaCodeValue;
@@ -33,8 +34,12 @@ class _PhoneInputWithAreaCodeState extends State<PhoneInputWithAreaCode> {
     _numberController = TextEditingController(text: widget.numberValue);
   }
 
-  void _onChanged() {
-    widget.onChanged?.call(_areaCodeController.text, _numberController.text);
+  void _formatPhoneNumber(String value) {
+    final formatted = PhoneFormatter.format(value);
+    _numberController.value = TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
+    );
   }
 
   @override
@@ -43,7 +48,7 @@ class _PhoneInputWithAreaCodeState extends State<PhoneInputWithAreaCode> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '${widget.label}${widget.isRequired ? ' *' : ''}',
+          widget.label,
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
@@ -53,15 +58,12 @@ class _PhoneInputWithAreaCodeState extends State<PhoneInputWithAreaCode> {
         const SizedBox(height: 8),
         Row(
           children: [
-            // Campo do código de área
             SizedBox(
               width: 80,
               child: TextFormField(
                 controller: _areaCodeController,
                 decoration: InputDecoration(
                   hintText: '11',
-                  prefixText: '(',
-                  suffixText: ')',
                   constraints: const BoxConstraints(minHeight: 56),
                   border: OutlineInputBorder(
                     borderSide:
@@ -79,27 +81,16 @@ class _PhoneInputWithAreaCodeState extends State<PhoneInputWithAreaCode> {
                   FilteringTextInputFormatter.digitsOnly,
                   LengthLimitingTextInputFormatter(2),
                 ],
-                onChanged: (_) => _onChanged(),
-                validator: widget.isRequired
-                    ? (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'DDD obrigatório';
-                        }
-                        if (value.length != 2) {
-                          return 'DDD inválido';
-                        }
-                        return null;
-                      }
-                    : null,
+                onChanged: (_) => widget.onChanged
+                    ?.call(_areaCodeController.text, _numberController.text),
               ),
             ),
             const SizedBox(width: 12),
-            // Campo do número
             Expanded(
               child: TextFormField(
                 controller: _numberController,
                 decoration: InputDecoration(
-                  hintText: '99999-9999',
+                  hintText: '9 9999-9999',
                   prefixIcon: Icon(Icons.phone, color: AppTheme.textSecondary),
                   constraints: const BoxConstraints(minHeight: 56),
                   border: OutlineInputBorder(
@@ -114,22 +105,11 @@ class _PhoneInputWithAreaCodeState extends State<PhoneInputWithAreaCode> {
                   ),
                 ),
                 keyboardType: TextInputType.phone,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(9),
-                ],
-                onChanged: (_) => _onChanged(),
-                validator: widget.isRequired
-                    ? (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Número obrigatório';
-                        }
-                        if (value.length < 8 || value.length > 9) {
-                          return 'Número inválido';
-                        }
-                        return null;
-                      }
-                    : null,
+                onChanged: (value) {
+                  _formatPhoneNumber(value);
+                  widget.onChanged
+                      ?.call(_areaCodeController.text, _numberController.text);
+                },
               ),
             ),
           ],
