@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:teste_create_flutter/core/services/auth-service/auth_service.dart';
+import 'package:teste_create_flutter/domain/repositories/auth_service.dart';
 import 'package:teste_create_flutter/core/services/http_service.dart';
 
 class AuthServiceRemote implements AuthService {

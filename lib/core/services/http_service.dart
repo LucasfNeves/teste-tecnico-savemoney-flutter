@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:teste_create_flutter/core/services/auth-service/token_storage.dart';
+import 'package:teste_create_flutter/domain/models/token_storage.dart';
 
 import '../config/app_config.dart';
 

@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:teste_create_flutter/core/services/register/register_service.dart';
+import 'package:teste_create_flutter/domain/repositories/register_service.dart';
 import 'package:teste_create_flutter/core/services/register/register_service_remote.dart';
 import 'package:teste_create_flutter/presentation/blocs/register/register_event.dart';
 import 'package:teste_create_flutter/presentation/blocs/register/register_state.dart';

@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:teste_create_flutter/core/services/auth-service/auth_service.dart';
+import 'package:teste_create_flutter/domain/repositories/auth_service.dart';
 import 'package:teste_create_flutter/core/services/auth-service/auth_service_remote.dart';
-import 'package:teste_create_flutter/core/services/auth-service/token_storage.dart';
+import 'package:teste_create_flutter/domain/models/token_storage.dart';
 import 'package:teste_create_flutter/presentation/blocs/auth/auth_event.dart';
 import 'package:teste_create_flutter/presentation/blocs/auth/auth_state.dart';
 import 'package:teste_create_flutter/shared/utils/error_handler.dart';
