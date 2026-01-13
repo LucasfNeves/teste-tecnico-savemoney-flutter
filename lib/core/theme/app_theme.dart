@@ -15,6 +15,7 @@ class AppTheme {
   static const Color successGreen = Color(0xFF10B981);
   static const Color errorRed = Color(0xFFEF4444);
   static const Color backGroundAppBar = Color(0xE4E4E4E4);
+  static const Color dividerColor = Color(0xFFE3E3E3);
 
   static ThemeData get lightTheme {
     return ThemeData(
@@ -38,8 +39,13 @@ class AppTheme {
           fontWeight: FontWeight.w500,
           color: textPrimary,
         ),
+        displaySmall: GoogleFonts.poppins(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: textSecondary,
+        ),
         headlineMedium: GoogleFonts.poppins(
-          fontSize: 24,
+          fontSize: 20,
           fontWeight: FontWeight.w500,
           color: textPrimary,
         ),
