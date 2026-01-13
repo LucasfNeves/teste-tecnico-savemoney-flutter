@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:teste_create_flutter/core/theme/app_theme.dart';
 import 'package:teste_create_flutter/shared/utils/validators_custom_input.dart';
 
-enum InputType { text, email, password, number }
+enum InputType { text, email, password, number, name }
 
 class CustomInput extends StatefulWidget {
   final String label;
@@ -67,11 +67,11 @@ class _CustomInputState extends State<CustomInput> {
         return ValidatorsCustomInput.email(value);
       case InputType.password:
         return ValidatorsCustomInput.password(value);
+      case InputType.name:
+        return ValidatorsCustomInput.fullName(value);
       case InputType.text:
       case InputType.number:
         return ValidatorsCustomInput.required(value);
-      default:
-        return null;
     }
   }
 
@@ -82,6 +82,7 @@ class _CustomInputState extends State<CustomInput> {
       case InputType.password:
         return TextInputType.visiblePassword;
       case InputType.text:
+      case InputType.name:
         return TextInputType.text;
       case InputType.number:
         return TextInputType.number;
