@@ -18,6 +18,9 @@ class AppTheme {
   static const Color dividerColor = Color(0xFFE3E3E3);
   static const Color skeletonBackground = Color(0xFFE0E0E0);
   static const Color skeletonBorder = Color(0xFFC6C6C6);
+  static const Color cardBackground = Color(0xFFFFFFFF);
+  static const Color cardBorderColor = Color(0xFFF9F9F9);
+  static const Color errorColor = Color(0xFFEF4444);
 
   static ThemeData get lightTheme {
     return ThemeData(
