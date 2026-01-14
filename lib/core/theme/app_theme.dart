@@ -16,6 +16,8 @@ class AppTheme {
   static const Color errorRed = Color(0xFFEF4444);
   static const Color backGroundAppBar = Color(0xE4E4E4E4);
   static const Color dividerColor = Color(0xFFE3E3E3);
+  static const Color skeletonBackground = Color(0xFFE0E0E0);
+  static const Color skeletonBorder = Color(0xFFC6C6C6);
 
   static ThemeData get lightTheme {
     return ThemeData(
