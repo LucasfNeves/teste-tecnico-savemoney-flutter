@@ -23,10 +23,26 @@ class _UsersListState extends State<UsersList> {
   late UserBloc _userBloc;
 
   final List<Map<String, String>> _mockUsers = [
-    {'name': 'Lucas F. S.', 'email': 'luc***@g*****.com**', 'createdAt': '2026-01-13'},
-    {'name': 'Maria Silva', 'email': 'mar***@g*****.com**', 'createdAt': '2026-01-12'},
-    {'name': 'João Santos', 'email': 'joa***@g*****.com**', 'createdAt': '2026-01-11'},
-    {'name': 'Ana Costa', 'email': 'ana***@g*****.com**', 'createdAt': '2026-01-10'},
+    {
+      'name': 'Lucas F. S.',
+      'email': 'luc***@g*****.com**',
+      'createdAt': '2026-01-13'
+    },
+    {
+      'name': 'Maria Silva',
+      'email': 'mar***@g*****.com**',
+      'createdAt': '2026-01-12'
+    },
+    {
+      'name': 'João Santos',
+      'email': 'joa***@g*****.com**',
+      'createdAt': '2026-01-11'
+    },
+    {
+      'name': 'Ana Costa',
+      'email': 'ana***@g*****.com**',
+      'createdAt': '2026-01-10'
+    },
   ];
 
   @override
@@ -57,7 +73,7 @@ class _UsersListState extends State<UsersList> {
       child: BlocProvider.value(
         value: _userBloc,
         child: MainLayout(
-          child: Padding(
+          child: SingleChildScrollView(
             padding: const EdgeInsets.only(top: 32),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
