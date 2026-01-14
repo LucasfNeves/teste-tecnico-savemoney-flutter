@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_theme.dart';
-import '../../../../shared/components/smal_text_with_icon.dart';
-import '../../../../shared/components/user_details_modal.dart';
-import '../../../../domain/models/user_model.dart';
+import '../../../../../core/theme/app_theme.dart';
+import '../../../../../shared/components/smal_text_with_icon.dart';
+import '../../../../../shared/components/user_details_modal.dart';
+import '../../../../../domain/models/user_model.dart';
 
 class OwnerUserCard extends StatelessWidget {
   final User user;
