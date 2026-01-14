@@ -20,7 +20,7 @@ class UsersList extends StatefulWidget {
 }
 
 class _UsersListState extends State<UsersList> {
-  late UserBloc _userBloc;
+  final UserBloc _userBloc = UserBloc();
 
   final List<Map<String, String>> _mockUsers = [
     {
@@ -48,7 +48,6 @@ class _UsersListState extends State<UsersList> {
   @override
   void initState() {
     super.initState();
-    _userBloc = UserBloc();
     _userBloc.add(const GetUserRequested());
   }
 
