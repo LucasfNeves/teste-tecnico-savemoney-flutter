@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teste_create_flutter/core/theme/app_theme.dart';
 import 'package:teste_create_flutter/presentation/screens/users-list/components/owner-user-card/owner_user_card.dart';
 import 'package:teste_create_flutter/presentation/screens/users-list/components/owner-user-card/components/user_card_skeleton.dart';
@@ -43,119 +44,122 @@ class _UsersListState extends State<UsersList> {
 
   @override
   Widget build(BuildContext context) {
-    return MainLayout(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.only(top: 32),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Usuários Cadastrados',
-              style: Theme.of(context).textTheme.displayMedium,
+    return BlocProvider.value(
+        value: _userBloc,
+        child: MainLayout(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.only(top: 32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Usuários Cadastrados',
+                  style: Theme.of(context).textTheme.displayMedium,
+                ),
+                const SizedBox(height: 12),
+                StreamBuilder<UsersListState>(
+                  stream: _usersListBloc.stream,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData && snapshot.data is UsersListLoaded) {
+                      final state = snapshot.data as UsersListLoaded;
+                      return Text('${state.users.length + 1} usuários',
+                          style: Theme.of(context).textTheme.bodyMedium);
+                    }
+                    return const SizedBox.shrink();
+                  },
+                ),
+                const SizedBox(height: 16),
+                const CustomDivider(),
+                const SizedBox(height: 16),
+                StreamBuilder<UserState>(
+                  stream: _userBloc.stream,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const UserCardSkeleton();
+                    }
+
+                    final state = snapshot.data;
+
+                    if (state is UserLoading) {
+                      return const UserCardSkeleton();
+                    }
+
+                    if (state is UserSuccess) {
+                      return OwnerUserCard(user: state.user);
+                    }
+
+                    if (state is UserError) {
+                      return UserCardError(
+                        onRetry: () => _userBloc.add(const GetUserRequested()),
+                      );
+                    }
+
+                    return const SizedBox.shrink();
+                  },
+                ),
+                const SizedBox(height: 16),
+                const CustomDivider(),
+                const SizedBox(height: 16),
+                StreamBuilder<UsersListState>(
+                  stream: _usersListBloc.stream,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const StateDisplay(
+                        title: 'Não há outros usuários cadastrados',
+                        svgPath: 'lib/assets/emptity-state.svg',
+                        imageSize: 160,
+                      );
+                    }
+
+                    final state = snapshot.data!;
+
+                    if (state is UsersListLoading || !snapshot.hasData) {
+                      return Column(
+                        children: List.generate(
+                          4,
+                          (index) => Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: SimpleUserCardSkeleton(),
+                          ),
+                        ),
+                      );
+                    }
+
+                    if (state is UsersListError) {
+                      return StateDisplay(
+                        title: 'Erro ao carregar usuários',
+                        subtitle: state.message,
+                        icon: Icons.error_outline,
+                        iconColor: AppTheme.primaryPurple,
+                        action: ElevatedButton(
+                          onPressed: () =>
+                              _usersListBloc.add(GetUsersListRequested()),
+                          child: const Text('Tentar novamente'),
+                        ),
+                      );
+                    }
+
+                    if (state is UsersListLoaded) {
+                      return Column(
+                        children: state.users
+                            .map((user) => Padding(
+                                  padding: const EdgeInsets.only(bottom: 16),
+                                  child: SimpleUserCard(
+                                    name: user.name,
+                                    email: user.email,
+                                    createdAt: user.createdAt.toString(),
+                                  ),
+                                ))
+                            .toList(),
+                      );
+                    }
+
+                    return const SizedBox.shrink();
+                  },
+                ),
+              ],
             ),
-            const SizedBox(height: 12),
-            StreamBuilder<UsersListState>(
-              stream: _usersListBloc.stream,
-              builder: (context, snapshot) {
-                if (snapshot.hasData && snapshot.data is UsersListLoaded) {
-                  final state = snapshot.data as UsersListLoaded;
-                  return Text('${state.users.length + 1} usuários',
-                      style: Theme.of(context).textTheme.bodyMedium);
-                }
-                return const SizedBox.shrink();
-              },
-            ),
-            const SizedBox(height: 16),
-            const CustomDivider(),
-            const SizedBox(height: 16),
-            StreamBuilder<UserState>(
-              stream: _userBloc.stream,
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const UserCardSkeleton();
-                }
-
-                final state = snapshot.data;
-
-                if (state is UserLoading) {
-                  return const UserCardSkeleton();
-                }
-
-                if (state is UserSuccess) {
-                  return OwnerUserCard(user: state.user);
-                }
-
-                if (state is UserError) {
-                  return UserCardError(
-                    onRetry: () => _userBloc.add(const GetUserRequested()),
-                  );
-                }
-
-                return const SizedBox.shrink();
-              },
-            ),
-            const SizedBox(height: 16),
-            const CustomDivider(),
-            const SizedBox(height: 16),
-            StreamBuilder<UsersListState>(
-              stream: _usersListBloc.stream,
-              builder: (context, snapshot) {
-                final state = snapshot.data!;
-
-                if (state is UsersListLoading || !snapshot.hasData) {
-                  return Column(
-                    children: List.generate(
-                      3, // Quantidade de skeletons
-                      (index) => Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: SimpleUserCardSkeleton(),
-                      ),
-                    ),
-                  );
-                }
-                if (!snapshot.hasData) {
-                  return const StateDisplay(
-                    title: 'Não há outros usuários cadastrados',
-                    svgPath: 'lib/assets/emptity-state.svg',
-                    imageSize: 160,
-                  );
-                }
-
-                if (state is UsersListError) {
-                  return StateDisplay(
-                    title: 'Erro ao carregar usuários',
-                    subtitle: state.message,
-                    icon: Icons.error_outline,
-                    iconColor: AppTheme.primaryPurple,
-                    action: ElevatedButton(
-                      onPressed: () =>
-                          _usersListBloc.add(GetUsersListRequested()),
-                      child: const Text('Tentar novamente'),
-                    ),
-                  );
-                }
-
-                if (state is UsersListLoaded) {
-                  return Column(
-                    children: state.users
-                        .map((user) => Padding(
-                              padding: const EdgeInsets.only(bottom: 16),
-                              child: SimpleUserCard(
-                                name: user.name,
-                                email: user.email,
-                                createdAt: user.createdAt.toString(),
-                              ),
-                            ))
-                        .toList(),
-                  );
-                }
-
-                return const SizedBox.shrink();
-              },
-            ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }
