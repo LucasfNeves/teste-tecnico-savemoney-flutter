@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:teste_create_flutter/presentation/blocs/user/user_bloc.dart';
+import 'package:teste_create_flutter/presentation/screens/users-list/components/owner-user-card/components/owner_user_card_details.dart';
 import '../../../../../core/theme/app_theme.dart';
 import '../../../../../shared/components/smal_text_with_icon.dart';
-import '../../../../../shared/components/user_details_modal.dart';
 import '../../../../../domain/models/user_model.dart';
 
 class OwnerUserCard extends StatelessWidget {
@@ -14,14 +16,15 @@ class OwnerUserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userBloc = context.read<UserBloc>();
     return GestureDetector(
-      onTap: () => UserDetailsModal.show(
+      onTap: () => OwnerUserCardDetails.show(
         context,
+        userBloc: userBloc,
         name: user.displayName,
         email: user.email,
         initial: user.initial,
         phones: user.formattedPhones,
-        isOwner: true,
       ),
       child: Card(
         color: AppTheme.accentPurple,
