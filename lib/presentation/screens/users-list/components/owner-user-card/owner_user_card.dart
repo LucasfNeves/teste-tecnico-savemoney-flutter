@@ -17,7 +17,7 @@ class OwnerUserCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => UserDetailsModal.show(
         context,
-        name: user.name,
+        name: user.displayName,
         email: user.email,
         initial: user.initial,
         phones: user.formattedPhones,
@@ -56,7 +56,7 @@ class OwnerUserCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        user.name,
+                        user.displayName,
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       const SizedBox(height: 8),

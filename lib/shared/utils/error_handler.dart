@@ -3,9 +3,19 @@ import 'package:dio/dio.dart';
 class ErrorHandler {
   static String getErrorMessage(dynamic error) {
     if (error is DioException && error.response != null) {
-      return error.response!.data['message'] ??
-          error.response!.data['error'] ??
-          'Erro: ${error.response!.statusCode}';
+      final data = error.response!.data;
+
+      if (data is Map<String, dynamic>) {
+        return data['message'] ??
+            data['error'] ??
+            'Erro: ${error.response!.statusCode}';
+      }
+
+      if (data is String) {
+        return data.isNotEmpty ? data : 'Erro: ${error.response!.statusCode}';
+      }
+
+      return 'Erro: ${error.response!.statusCode}';
     }
 
     if (error is DioException) {

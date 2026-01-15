@@ -9,4 +9,19 @@ class UserServiceRemote implements UserService {
   Future<Response> getUserById() async {
     return _dio.get('/user');
   }
+
+  @override
+  Future<Response> getUsersExcludeCurrentUser() async {
+    return _dio.get('/users/exclude-current');
+  }
+
+  @override
+  Future<Response> updateUserProfile(Map<String, dynamic> data) async {
+    return _dio.patch('/user', data: data);
+  }
+
+  @override
+  Future<Response> deleteUserAccount() async {
+    return _dio.delete('/user');
+  }
 }

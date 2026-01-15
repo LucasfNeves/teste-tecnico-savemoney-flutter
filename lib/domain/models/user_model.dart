@@ -1,5 +1,8 @@
+import '../../shared/utils/string_extensions.dart';
+
 class User {
   final String id;
+  final String name;
   final String email;
   final List<Telephone> telephones;
   final DateTime createdAt;
@@ -7,6 +10,7 @@ class User {
 
   User({
     required this.id,
+    this.name = '',
     required this.email,
     required this.telephones,
     required this.createdAt,
@@ -15,18 +19,27 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'],
-      email: json['email'],
-      telephones: (json['telephones'] as List)
-          .map((tel) => Telephone.fromJson(tel))
-          .toList(),
-      createdAt: DateTime.parse(json['created_at']),
-      modifiedAt: DateTime.parse(json['modified_at']),
+      id: json['id'] ?? '',
+      name: json['name'] ?? '',
+      email: json['email'] ?? '',
+      telephones: json['telephones'] != null
+          ? (json['telephones'] as List)
+              .map((tel) => Telephone.fromJson(tel))
+              .toList()
+          : [],
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'])
+          : DateTime.now(),
+      modifiedAt: json['modified_at'] != null
+          ? DateTime.parse(json['modified_at'])
+          : DateTime.now(),
     );
   }
 
-  String get name => email.split('@')[0];
-  String get initial => name.isNotEmpty ? name[0].toUpperCase() : '';
+  String get initial =>
+      name.isNotEmpty ? name.firstLetterOrDefault : email.firstLetterOrDefault;
+
+  String get displayName => name.isNotEmpty ? name : email.emailUsername;
 
   List<String> get formattedPhones => telephones
       .map((tel) =>
@@ -45,8 +58,8 @@ class Telephone {
 
   factory Telephone.fromJson(Map<String, dynamic> json) {
     return Telephone(
-      areaCode: json['area_code'],
-      number: json['number'],
+      areaCode: json['area_code'] ?? 0,
+      number: json['number'] ?? 0,
     );
   }
 

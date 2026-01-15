@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:teste_create_flutter/core/theme/app_theme.dart';
 import 'package:teste_create_flutter/presentation/screens/users-list/components/user_details_modal.dart';
+import 'package:teste_create_flutter/shared/utils/string_extensions.dart';
 
 class SimpleUserCard extends StatelessWidget {
   final String name;
@@ -13,10 +14,6 @@ class SimpleUserCard extends StatelessWidget {
     required this.email,
     required this.createdAt,
   });
-
-  String _getInitial() {
-    return name.isNotEmpty ? name[0].toUpperCase() : '?';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +43,7 @@ class SimpleUserCard extends StatelessWidget {
               radius: 24,
               backgroundColor: AppTheme.primaryPurple,
               child: Text(
-                _getInitial(),
+                name.firstLetterOrDefault,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 20,
@@ -60,8 +57,8 @@ class SimpleUserCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    name,
-                    style: TextStyle(
+                    name.truncate(10),
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: AppTheme.textPrimary,
@@ -70,17 +67,20 @@ class SimpleUserCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.email_outlined,
                         size: 14,
                         color: AppTheme.textSecondary,
                       ),
                       const SizedBox(width: 4),
-                      Text(
-                        email,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: AppTheme.textSecondary,
+                      Flexible(
+                        child: Text(
+                          email.truncate(10),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: AppTheme.textSecondary,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
