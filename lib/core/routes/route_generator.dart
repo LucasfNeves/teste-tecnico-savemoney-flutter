@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:teste_create_flutter/presentation/screens/login_screen.dart';
-import 'package:teste_create_flutter/presentation/screens/register/register_screen.dart';
+import 'package:teste_create_flutter/presentation/screens/register_screen.dart';
 import 'package:teste_create_flutter/presentation/screens/splash_screen.dart';
 import 'package:teste_create_flutter/presentation/screens/users-list/users_list.dart';
 import 'package:teste_create_flutter/shared/components/not_found_screen.dart';

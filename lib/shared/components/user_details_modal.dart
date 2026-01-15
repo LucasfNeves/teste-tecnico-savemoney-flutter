@@ -1,122 +1,105 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_theme.dart';
-import '../../../../shared/components/smal_text_with_icon.dart';
+import 'package:teste_create_flutter/core/theme/app_theme.dart';
+import 'package:teste_create_flutter/shared/utils/date_formatter.dart';
+import 'modal_drag_handle.dart';
 
 class UserDetailsModal extends StatelessWidget {
   final String name;
   final String email;
-  final String initial;
-  final List<String> phones;
-  final bool isOwner;
+  final String createdAt;
 
   const UserDetailsModal({
     super.key,
     required this.name,
     required this.email,
-    required this.initial,
-    required this.phones,
-    this.isOwner = false,
+    required this.createdAt,
   });
 
-  static void show(
-    BuildContext context, {
-    required String name,
-    required String email,
-    required String initial,
-    required List<String> phones,
-    bool isOwner = false,
-  }) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => UserDetailsModal(
-        name: name,
-        email: email,
-        initial: initial,
-        phones: phones,
-        isOwner: isOwner,
-      ),
-    );
+  String _getInitial() {
+    return name.isNotEmpty ? name[0].toUpperCase() : '?';
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
-        color: AppTheme.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
+        color: AppTheme.backgroundLight,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      padding: const EdgeInsets.all(24),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundColor: AppTheme.primaryPurple,
-                child: Text(
-                  initial,
-                  style: const TextStyle(
-                    color: AppTheme.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
-                    if (isOwner) ...[
-                      Container(
-                        margin: const EdgeInsets.only(top: 8),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: AppTheme.primaryPurple,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: const Text(
-                          'Você',
-                          style: TextStyle(
-                            color: AppTheme.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ],
+          ModalDragHandle(),
+          SizedBox(
+            height: 16,
           ),
-          const SizedBox(height: 24),
-          SmalTextWithIcon(icon: Icons.email, text: email),
+          CircleAvatar(
+            radius: 48,
+            backgroundColor: AppTheme.primaryPurple,
+            child: Text(
+              _getInitial(),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 40,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
           const SizedBox(height: 16),
           Text(
-            'Telefones',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+            name,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+              color: AppTheme.textPrimary,
+            ),
           ),
-          const SizedBox(height: 12),
-          ...phones.map((phone) => Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: SmalTextWithIcon(icon: Icons.phone, text: phone),
-              )),
           const SizedBox(height: 24),
+          _buildInfoRow(Icons.email_outlined, 'E-mail:', email),
+          const SizedBox(height: 16),
+          _buildInfoRow(Icons.calendar_today_outlined, 'Data de cadastro:',
+              DateFormatter.formatDate(createdAt)),
+          const SizedBox(height: 24),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(IconData icon, String label, String value) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppTheme.cardBackground,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: AppTheme.primaryPurple, size: 20),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppTheme.textSecondary,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppTheme.textPrimary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
