@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:teste_create_flutter/core/theme/app_theme.dart';
-import 'package:teste_create_flutter/presentation/screens/register/components/phone_input_with_area_code.dart';
+import 'package:teste_create_flutter/shared/components/phone_input_with_area_code.dart';
 import 'package:teste_create_flutter/shared/components/secundary_button.dart';
 
 class MultiplePhoneInput extends StatefulWidget {
