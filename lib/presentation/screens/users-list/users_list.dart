@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teste_create_flutter/core/theme/app_theme.dart';
 import 'package:teste_create_flutter/presentation/screens/users-list/components/owner-user-card/owner_user_card.dart';
 import 'package:teste_create_flutter/presentation/screens/users-list/components/owner-user-card/components/user_card_skeleton.dart';
