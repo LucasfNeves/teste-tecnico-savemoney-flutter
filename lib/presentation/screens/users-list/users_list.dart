@@ -16,6 +16,8 @@ import 'package:teste_create_flutter/presentation/blocs/user-list/user_list_bloc
 import 'package:teste_create_flutter/presentation/blocs/user-list/user_list_event.dart';
 import 'package:teste_create_flutter/presentation/blocs/user-list/user_list_state.dart';
 
+import '../../../shared/components/animate_on_visibility.dart';
+
 class UsersList extends StatefulWidget {
   const UsersList({super.key});
 
@@ -146,10 +148,12 @@ class _UsersListState extends State<UsersList> {
                         children: state.users
                             .map((user) => Padding(
                                   padding: const EdgeInsets.only(bottom: 16),
-                                  child: SimpleUserCard(
-                                    name: user.name,
-                                    email: user.email,
-                                    createdAt: user.createdAt.toString(),
+                                  child: AnimateOnVisibility(
+                                    child: SimpleUserCard(
+                                      name: user.name,
+                                      email: user.email,
+                                      createdAt: user.createdAt.toString(),
+                                    ),
                                   ),
                                 ))
                             .toList(),
