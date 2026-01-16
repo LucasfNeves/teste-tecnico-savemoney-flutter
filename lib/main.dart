@@ -7,6 +7,7 @@ import 'package:teste_create_flutter/domain/models/token_storage.dart';
 import 'package:teste_create_flutter/core/services/http_service.dart';
 import 'package:teste_create_flutter/core/theme/app_theme.dart';
 import 'package:teste_create_flutter/presentation/blocs/auth/auth_bloc.dart';
+import 'package:teste_create_flutter/presentation/blocs/counter/counter_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AuthBloc()),
+        BlocProvider(create: (context) => CounterBloc()),
       ],
       child: MaterialApp(
         title: 'SaveMoney',

@@ -7,6 +7,7 @@ import 'package:teste_create_flutter/presentation/screens/users-list/components/
 import 'package:teste_create_flutter/presentation/screens/users-list/components/simple_user_card.dart';
 import 'package:teste_create_flutter/shared/components/custom_divider.dart';
 import 'package:teste_create_flutter/shared/components/empty_state.dart';
+import 'package:teste_create_flutter/shared/components/like_card.dart';
 import 'package:teste_create_flutter/shared/components/simple-user-crad-skelleton.dart';
 import 'package:teste_create_flutter/shared/layouts/main_layout.dart';
 import 'package:teste_create_flutter/presentation/blocs/user/user_bloc.dart';
@@ -99,6 +100,8 @@ class _UsersListState extends State<UsersList> {
                     return const SizedBox.shrink();
                   },
                 ),
+                const SizedBox(height: 12),
+                const LikeCard(),
                 const SizedBox(height: 24),
                 const CustomDivider(),
                 const SizedBox(height: 24),

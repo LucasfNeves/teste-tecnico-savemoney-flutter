@@ -1,4 +1,6 @@
+// lib/core/routes/route_generator.dart
 import 'package:flutter/material.dart';
+import 'package:teste_create_flutter/presentation/screens/like_screen.dart';
 import 'package:teste_create_flutter/presentation/screens/login_screen.dart';
 import 'package:teste_create_flutter/presentation/screens/register_screen.dart';
 import 'package:teste_create_flutter/presentation/screens/splash_screen.dart';
@@ -18,6 +20,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const RegisterScreen());
       case AppRoutes.usersList:
         return MaterialPageRoute(builder: (_) => const UsersList());
+      case AppRoutes.like:
+        return MaterialPageRoute(builder: (_) => const LikeScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => const NotFoundScreen(),
