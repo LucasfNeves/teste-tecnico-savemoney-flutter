@@ -5,10 +5,12 @@ import 'package:teste_create_flutter/shared/components/secundary_button.dart';
 
 class MultiplePhoneInput extends StatefulWidget {
   final Function(List<Map<String, dynamic>>) onChanged;
+  final List<Map<String, dynamic>>? initialPhones;
 
   const MultiplePhoneInput({
     super.key,
     required this.onChanged,
+    this.initialPhones,
   });
 
   @override
@@ -16,9 +18,17 @@ class MultiplePhoneInput extends StatefulWidget {
 }
 
 class _MultiplePhoneInputState extends State<MultiplePhoneInput> {
-  final List<Map<String, dynamic>> _phones = [
-    {'area_code': '', 'number': ''}
-  ];
+  late List<Map<String, dynamic>> _phones;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialPhones != null && widget.initialPhones!.isNotEmpty) {
+      _phones = List.from(widget.initialPhones!);
+    } else {
+      _phones = [{'area_code': '', 'number': ''}];
+    }
+  }
 
   void _addPhone() {
     if (_phones.length < 5) {

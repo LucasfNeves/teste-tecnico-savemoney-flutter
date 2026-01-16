@@ -35,6 +35,17 @@ class _PhoneInputWithAreaCodeState extends State<PhoneInputWithAreaCode> {
     _numberController = TextEditingController(text: widget.numberValue);
   }
 
+  @override
+  void didUpdateWidget(PhoneInputWithAreaCode oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.areaCodeValue != oldWidget.areaCodeValue) {
+      _areaCodeController.text = widget.areaCodeValue ?? '';
+    }
+    if (widget.numberValue != oldWidget.numberValue) {
+      _numberController.text = widget.numberValue ?? '';
+    }
+  }
+
   void _formatPhoneNumber(String value) {
     final formatted = PhoneFormatter.format(value);
     _numberController.value = TextEditingValue(

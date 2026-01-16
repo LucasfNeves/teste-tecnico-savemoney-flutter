@@ -8,12 +8,14 @@ class CustomInput extends StatefulWidget {
   final String label;
   final InputType type;
   final TextEditingController? controller;
+  final bool shouldValidate;
 
   const CustomInput({
     super.key,
     required this.label,
     this.type = InputType.text,
     this.controller,
+    this.shouldValidate = true,
   });
 
   @override
@@ -62,6 +64,10 @@ class _CustomInputState extends State<CustomInput> {
   }
 
   String? _getDefaultValidator(String? value) {
+    if (!widget.shouldValidate) {
+      return null;
+    }
+
     switch (widget.type) {
       case InputType.email:
         return ValidatorsCustomInput.email(value);

@@ -50,6 +50,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       if (response.statusCode == 200) {
         final updatedUser = User.fromJson(response.data);
         emit(UserUpdateSuccess(updatedUser));
+        emit(UserSuccess(updatedUser));
       }
     } catch (e) {
       final errorMessage = ErrorHandler.getErrorMessage(e);

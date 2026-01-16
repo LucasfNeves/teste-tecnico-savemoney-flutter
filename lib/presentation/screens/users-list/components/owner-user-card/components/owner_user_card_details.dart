@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:teste_create_flutter/core/theme/app_theme.dart';
 import 'package:teste_create_flutter/presentation/blocs/user/user_bloc.dart';
 import 'package:teste_create_flutter/presentation/blocs/user/user_state.dart';
 import 'package:teste_create_flutter/presentation/blocs/user/user_event.dart';
-import 'package:teste_create_flutter/shared/components/secundary_button.dart';
-import '../../../../../../shared/components/custom_input.dart';
-import '../../../../../../shared/components/modal_drag_handle.dart';
-import '../../../../../../shared/components/multiple_phone_input.dart';
-import '../../../../../../shared/components/primary_button.dart';
+import 'package:teste_create_flutter/shared/components/modal_drag_handle.dart';
+import 'package:teste_create_flutter/presentation/screens/users-list/components/owner-user-card/components/owner_user_card_avatar.dart';
+import 'package:teste_create_flutter/presentation/screens/users-list/components/owner-user-card/components/owner_user_card_form.dart';
+import 'package:teste_create_flutter/presentation/screens/users-list/components/owner-user-card/components/owner_user_card_actions.dart';
 
 class OwnerUserCardDetails extends StatefulWidget {
   final String name;
@@ -23,6 +24,7 @@ class OwnerUserCardDetails extends StatefulWidget {
     required this.initial,
     required this.phones,
   });
+
   static void show(
     BuildContext context, {
     required String name,
@@ -56,7 +58,20 @@ class _OwnerUserCardDetailsState extends State<OwnerUserCardDetails> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  List<Map<String, dynamic>> _phones = [];
+
+  String? _userName;
+  String? _userEmail;
+  List<Map<String, dynamic>>? _userPhones;
+  List<Map<String, dynamic>>? _currentPhones;
+  bool _shouldCloseOnNextSuccess = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadUserData();
+    });
+  }
 
   @override
   void dispose() {
@@ -66,168 +81,185 @@ class _OwnerUserCardDetailsState extends State<OwnerUserCardDetails> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: context.read<UserBloc>().stream,
-      initialData: context.read<UserBloc>().state,
-      builder: (context, snapshot) {
-        if (snapshot.hasData && snapshot.data is UserSuccess) {
-          final user = (snapshot.data as UserSuccess).user;
+  void _loadUserData() {
+    final state = context.read<UserBloc>().state;
 
-          print(user.telephones);
+    if (state is UserSuccess && _userName == null) {
+      final user = state.user;
 
-          if (_nameController.text.isEmpty) {
-            _nameController.text = user.displayName;
-            _emailController.text = user.email;
-            _phones = user.telephones
-                .map((t) => {
-                      'number': t.formattedNumber,
-                      'ddd': t.areaCode,
-                    })
-                .toList();
-          }
-        }
+      setState(() {
+        _userName = user.displayName;
+        _userEmail = user.email;
+        _userPhones = user.telephones
+            .map((t) => {
+                  'area_code': t.areaCode.toString(),
+                  'number': t.number.toString(),
+                })
+            .toList();
+        _currentPhones = _userPhones;
 
-        return BlocListener<UserBloc, UserState>(
-          listener: (context, state) {
-            if (state is UserUpdateSuccess) {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Perfil atualizado com sucesso!')),
-              );
-            }
-          },
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.8,
-            ),
-            child: Container(
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                color: AppTheme.backgroundLight,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ModalDragHandle(),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.only(
-                        left: 24,
-                        right: 24,
-                        top: 16,
-                        bottom: 24,
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // Avatar
-                          CircleAvatar(
-                            radius: 48,
-                            backgroundColor: AppTheme.primaryPurple,
-                            child: Text(
-                              widget.initial,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 40,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 24),
+        _nameController.text = user.displayName;
+        _emailController.text = user.email;
+      });
+    }
+  }
 
-                          Form(
-                            key: _formKey,
-                            child: Column(
-                              children: [
-                                CustomInput(
-                                  label: 'Nome Completo',
-                                  type: InputType.name,
-                                  controller: _nameController,
-                                ),
-                                const SizedBox(height: 20),
-                                CustomInput(
-                                  label: 'E-mail',
-                                  type: InputType.email,
-                                  controller: _emailController,
-                                ),
-                                const SizedBox(height: 20),
-                                CustomInput(
-                                  label: 'Nova Senha',
-                                  type: InputType.password,
-                                  controller: _passwordController,
-                                ),
-                                const SizedBox(height: 20),
-                                MultiplePhoneInput(
-                                  onChanged: (phones) {
-                                    setState(() => _phones = phones);
-                                  },
-                                ),
-                                const SizedBox(height: 40),
-                                BlocBuilder<UserBloc, UserState>(
-                                  builder: (context, state) {
-                                    return PrimaryButton(
-                                      text: 'Atualizar Perfil',
-                                      isLoading: state is UserUpdateLoading,
-                                      onPressed: state is UserUpdateLoading
-                                          ? null
-                                          : () {
-                                              if (_formKey.currentState!
-                                                  .validate()) {
-                                                context.read<UserBloc>().add(
-                                                      UpdateUserProfileRequested(
-                                                        {
-                                                          'name':
-                                                              _nameController
-                                                                  .text
-                                                                  .trim(),
-                                                          'email':
-                                                              _emailController
-                                                                  .text
-                                                                  .trim(),
-                                                          'password':
-                                                              _passwordController
-                                                                  .text,
-                                                          'telephones': _phones,
-                                                        },
-                                                      ),
-                                                    );
-                                              }
-                                            },
-                                    );
-                                  },
-                                ),
-                                BlocBuilder<UserBloc, UserState>(
-                                  builder: (context, state) {
-                                    return SecundaryButton(
-                                      key: const Key('delete_account_button'),
-                                      label: 'Excluir Conta',
-                                      icon: Icons.delete,
-                                      onPressed: () {
-                                        if (state is! UserUpdateLoading &&
-                                            _formKey.currentState!.validate()) {
-                                          context.read<UserBloc>().add(
-                                              DeleteUserAccountRequested());
-                                        }
-                                      },
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+  void _handleSubmit() {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    final data = <String, dynamic>{
+      'name': _nameController.text,
+      'email': _emailController.text,
+      'telephones': _currentPhones,
+    };
+
+    if (_passwordController.text.isNotEmpty) {
+      data['password'] = _passwordController.text;
+    }
+
+    context.read<UserBloc>().add(
+          UpdateUserProfileRequested(data),
+        );
+  }
+
+  void _handleDelete() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirmar exclusão'),
+        content: const Text(
+          'Tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text(
+              'Excluir',
+              style: TextStyle(color: AppTheme.errorRed),
             ),
           ),
-        );
+        ],
+      ),
+    );
+
+    if (confirmed == true && mounted) {
+      context.read<UserBloc>().add(DeleteUserAccountRequested());
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<UserBloc, UserState>(
+      listener: (context, state) {
+        if (state is UserUpdateSuccess) {
+          _shouldCloseOnNextSuccess = true;
+        } else if (state is UserSuccess) {
+          if (_shouldCloseOnNextSuccess) {
+            Navigator.pop(context);
+            showTopSnackBar(
+              Overlay.of(context),
+              const CustomSnackBar.success(
+                message: 'Perfil atualizado com sucesso!',
+              ),
+            );
+            _shouldCloseOnNextSuccess = false;
+          } else {
+            _loadUserData();
+          }
+        } else if (state is UserUpdateError) {
+          showTopSnackBar(
+            Overlay.of(context),
+            CustomSnackBar.error(
+              message: state.message,
+            ),
+          );
+        } else if (state is UserDeleteSuccess) {
+          Navigator.pop(context);
+          Navigator.pushReplacementNamed(context, '/login');
+          showTopSnackBar(
+            Overlay.of(context),
+            const CustomSnackBar.success(
+              message: 'Conta excluída com sucesso!',
+            ),
+          );
+        } else if (state is UserDeleteError) {
+          showTopSnackBar(
+            Overlay.of(context),
+            CustomSnackBar.error(
+              message: state.message,
+            ),
+          );
+        }
       },
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.8,
+        ),
+        child: Container(
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            color: AppTheme.backgroundLight,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const ModalDragHandle(),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.only(
+                    left: 24,
+                    right: 24,
+                    top: 16,
+                    bottom: 24,
+                  ),
+                  child: _buildContent(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContent() {
+    if (_userName == null || _userEmail == null || _userPhones == null) {
+      return const SizedBox(
+        height: 300,
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        OwnerUserCardAvatar(initial: widget.initial),
+        const SizedBox(height: 24),
+        OwnerUserCardForm(
+          formKey: _formKey,
+          nameController: _nameController,
+          emailController: _emailController,
+          passwordController: _passwordController,
+          userPhones: _userPhones!,
+          onPhonesChanged: (phones) {
+            setState(() {
+              _currentPhones = phones;
+            });
+          },
+        ),
+        const SizedBox(height: 40),
+        OwnerUserCardActions(
+          onUpdate: _handleSubmit,
+          onDelete: _handleDelete,
+        ),
+      ],
     );
   }
 }
