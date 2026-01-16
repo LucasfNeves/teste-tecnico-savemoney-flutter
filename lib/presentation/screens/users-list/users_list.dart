@@ -70,9 +70,9 @@ class _UsersListState extends State<UsersList> {
                     return const SizedBox.shrink();
                   },
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 24),
                 const CustomDivider(),
-                const SizedBox(height: 16),
+                const SizedBox(height: 24),
                 StreamBuilder<UserState>(
                   stream: _userBloc.stream,
                   builder: (context, snapshot) {
@@ -99,9 +99,9 @@ class _UsersListState extends State<UsersList> {
                     return const SizedBox.shrink();
                   },
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 24),
                 const CustomDivider(),
-                const SizedBox(height: 16),
+                const SizedBox(height: 24),
                 StreamBuilder<UsersListState>(
                   stream: _usersListBloc.stream,
                   builder: (context, snapshot) {
