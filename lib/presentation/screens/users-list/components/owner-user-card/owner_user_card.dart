@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teste_create_flutter/presentation/blocs/user/user_bloc.dart';
 import 'package:teste_create_flutter/presentation/screens/users-list/components/owner-user-card/components/owner_user_card_details.dart';
+import 'package:teste_create_flutter/shared/utils/strings_utils.dart';
 import '../../../../../core/theme/app_theme.dart';
 import '../../../../../shared/components/smal_text_with_icon.dart';
 import '../../../../../domain/models/user_model.dart';
@@ -59,8 +60,9 @@ class OwnerUserCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        user.displayName,
+                        user.displayName.truncateWithEllipsis(15),
                         style: Theme.of(context).textTheme.headlineMedium,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 8),
                       SmalTextWithIcon(icon: Icons.email, text: user.email),

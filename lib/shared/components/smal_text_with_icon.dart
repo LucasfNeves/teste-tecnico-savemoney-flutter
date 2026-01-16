@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:teste_create_flutter/core/theme/app_theme.dart';
+import 'package:teste_create_flutter/shared/utils/strings_utils.dart';
 
 class SmalTextWithIcon extends StatelessWidget {
   final IconData icon;
@@ -22,7 +23,7 @@ class SmalTextWithIcon extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         Text(
-          text,
+          text.truncateWithEllipsis(20),
           style: Theme.of(context).textTheme.displaySmall,
         ),
       ],

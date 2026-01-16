@@ -103,7 +103,9 @@ class _UsersListState extends State<UsersList> {
                 StreamBuilder<UsersListState>(
                   stream: _usersListBloc.stream,
                   builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
+                    if (!snapshot.hasData ||
+                        (snapshot.data is UsersListLoaded &&
+                            (snapshot.data as UsersListLoaded).users.isEmpty)) {
                       return const StateDisplay(
                         title: 'Não há outros usuários cadastrados',
                         svgPath: 'lib/assets/emptity-state.svg',

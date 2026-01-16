@@ -1,4 +1,4 @@
-import '../../shared/utils/string_extensions.dart';
+import 'package:teste_create_flutter/shared/utils/strings_utils.dart';
 
 class User {
   final String id;

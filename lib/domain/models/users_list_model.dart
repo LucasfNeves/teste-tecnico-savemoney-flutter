@@ -1,4 +1,4 @@
-import '../../shared/utils/string_extensions.dart';
+import 'package:teste_create_flutter/shared/utils/strings_utils.dart';
 
 class UserList {
   final String id;
@@ -29,9 +29,8 @@ class UserList {
     );
   }
 
-  String get initial => name.isNotEmpty
-      ? name.firstLetterOrDefault
-      : email.firstLetterOrDefault;
+  String get initial =>
+      name.isNotEmpty ? name.firstLetterOrDefault : email.firstLetterOrDefault;
 
   String get displayName => name.isNotEmpty ? name : email.emailUsername;
 }

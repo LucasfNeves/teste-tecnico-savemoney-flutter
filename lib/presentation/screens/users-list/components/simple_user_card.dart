@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:teste_create_flutter/core/theme/app_theme.dart';
 import 'package:teste_create_flutter/shared/components/user_details_modal.dart';
-import 'package:teste_create_flutter/shared/utils/string_extensions.dart';
+import 'package:teste_create_flutter/shared/utils/strings_utils.dart';
 
 class SimpleUserCard extends StatelessWidget {
   final String name;
@@ -57,7 +57,7 @@ class SimpleUserCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    name.truncate(10),
+                    name.truncateWithEllipsis(20),
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -75,7 +75,7 @@ class SimpleUserCard extends StatelessWidget {
                       const SizedBox(width: 4),
                       Flexible(
                         child: Text(
-                          email.truncate(10),
+                          email.truncateWithEllipsis(20),
                           style: const TextStyle(
                             fontSize: 14,
                             color: AppTheme.textSecondary,
