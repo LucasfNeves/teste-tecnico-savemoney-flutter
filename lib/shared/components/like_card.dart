@@ -25,13 +25,6 @@ class _LikeCardState extends State<LikeCard> {
     }
   }
 
-  void _handleStarTap(int index) {
-    final counterBloc = context.read<CounterBloc>();
-    for (int i = 0; i <= index; i++) {
-      counterBloc.increment();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -54,10 +47,8 @@ class _LikeCardState extends State<LikeCard> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(5, (index) {
-                  return GestureDetector(
-                    onTap: widget.isFullScreen
-                        ? () => _handleStarTap(index)
-                        : null,
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
                     child: Icon(
                       Icons.star,
                       size: widget.isFullScreen ? 48 : 32,
