@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teste_create_flutter/presentation/blocs/user/user_bloc.dart';
-import 'package:teste_create_flutter/presentation/screens/users-list/components/owner-user-card/components/owner_user_card_details.dart';
+import 'package:teste_create_flutter/presentation/screens/users-list/components/owner-user-card/owner-card-details/owner_user_card_details.dart';
 import 'package:teste_create_flutter/shared/utils/strings_utils.dart';
 import '../../../../../core/theme/app_theme.dart';
 import '../../../../../shared/components/smal_text_with_icon.dart';

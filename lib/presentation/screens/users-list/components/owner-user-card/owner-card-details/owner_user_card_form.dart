@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:teste_create_flutter/shared/components/custom_input.dart';
 import 'package:teste_create_flutter/shared/components/multiple_phone_input.dart';
+
+import '../../../../../../shared/components/custom_input/custom_input.dart';
 
 class OwnerUserCardForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;

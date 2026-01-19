@@ -8,7 +8,7 @@ import 'package:teste_create_flutter/presentation/blocs/user/user_state.dart';
 import 'package:teste_create_flutter/presentation/blocs/user/user_event.dart';
 import 'package:teste_create_flutter/shared/components/modal_drag_handle.dart';
 import 'package:teste_create_flutter/presentation/screens/users-list/components/owner-user-card/components/owner_user_card_avatar.dart';
-import 'package:teste_create_flutter/presentation/screens/users-list/components/owner-user-card/components/owner_user_card_form.dart';
+import 'package:teste_create_flutter/presentation/screens/users-list/components/owner-user-card/owner-card-details/owner_user_card_form.dart';
 import 'package:teste_create_flutter/presentation/screens/users-list/components/owner-user-card/components/owner_user_card_actions.dart';
 
 class OwnerUserCardDetails extends StatefulWidget {
