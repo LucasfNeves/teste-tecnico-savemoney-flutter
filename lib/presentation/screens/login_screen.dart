@@ -24,6 +24,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
 
   @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
@@ -63,22 +70,24 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 40),
               BlocBuilder<AuthBloc, AuthState>(
-                buildWhen: (previous, current) => 
+                buildWhen: (previous, current) =>
                     previous.runtimeType != current.runtimeType,
                 builder: (context, state) {
                   return PrimaryButton(
                     text: 'Entrar',
                     isLoading: state is AuthLoading,
-                    onPressed: state is AuthLoading ? null : () {
-                      if (_formKey.currentState!.validate()) {
-                        context.read<AuthBloc>().add(
-                              AuthLoginRequested(
-                                _emailController.text.trim(),
-                                _passwordController.text,
-                              ),
-                            );
-                      }
-                    },
+                    onPressed: state is AuthLoading
+                        ? null
+                        : () {
+                            if (_formKey.currentState!.validate()) {
+                              context.read<AuthBloc>().add(
+                                    AuthLoginRequested(
+                                      _emailController.text.trim(),
+                                      _passwordController.text,
+                                    ),
+                                  );
+                            }
+                          },
                   );
                 },
               ),
@@ -93,12 +102,5 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
   }
 }
