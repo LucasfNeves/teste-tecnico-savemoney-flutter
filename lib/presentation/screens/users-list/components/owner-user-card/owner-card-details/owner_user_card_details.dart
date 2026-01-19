@@ -193,12 +193,15 @@ class _OwnerUserCardDetailsState extends State<OwnerUserCardDetails> {
           );
         }
       },
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height * 0.8,
+      child: Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
         child: Container(
           width: double.infinity,
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.9,
+          ),
           decoration: const BoxDecoration(
             color: AppTheme.backgroundLight,
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),

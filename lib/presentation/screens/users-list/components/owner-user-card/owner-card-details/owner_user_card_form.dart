@@ -50,7 +50,6 @@ class _OwnerUserCardFormState extends State<OwnerUserCardForm> {
             label: 'Nova Senha (opcional)',
             type: InputType.password,
             controller: widget.passwordController,
-            shouldValidate: false,
           ),
           const SizedBox(height: 20),
           MultiplePhoneInput(
