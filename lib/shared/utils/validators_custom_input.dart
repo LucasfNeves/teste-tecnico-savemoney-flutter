@@ -34,10 +34,17 @@ class ValidatorsCustomInput {
     bool requireLowercase = false,
     bool requireNumber = false,
     bool requireSpecialChar = false,
+    bool isRequired = true,
     String? message,
   }) {
-    final requiredError = required(value);
-    if (requiredError != null) return requiredError;
+    if (isRequired) {
+      final requiredError = required(value);
+      if (requiredError != null) return requiredError;
+    } else {
+      if (value == null || value.trim().isEmpty) {
+        return null;
+      }
+    }
 
     if (value!.length < minLength) {
       return message ?? _invalidPasswordMessage;

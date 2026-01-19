@@ -20,6 +20,7 @@ class CustomInput extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
   final TextInputAction? textInputAction;
   final InputDecorationConfig? decorationConfig;
+  final bool isRequired;
 
   const CustomInput({
     super.key,
@@ -36,6 +37,7 @@ class CustomInput extends StatefulWidget {
     this.inputFormatters,
     this.textInputAction,
     this.decorationConfig,
+    this.isRequired = true,
   });
 
   @override
@@ -113,14 +115,17 @@ class _CustomInputState extends State<CustomInput> {
       case InputType.email:
         return ValidatorsCustomInput.email(value);
       case InputType.password:
-        return ValidatorsCustomInput.password(value);
+        return ValidatorsCustomInput.password(
+          value,
+          isRequired: widget.isRequired,
+        );
       case InputType.name:
         return ValidatorsCustomInput.fullName(value);
       case InputType.phone:
         return ValidatorsCustomInput.phone(value);
       case InputType.text:
       case InputType.number:
-        return ValidatorsCustomInput.required(value);
+        return widget.isRequired ? ValidatorsCustomInput.required(value) : null;
     }
   }
 }
