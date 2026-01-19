@@ -3,13 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teste_create_flutter/presentation/blocs/auth/auth_bloc.dart';
 import 'package:teste_create_flutter/presentation/blocs/auth/auth_event.dart';
 import 'package:teste_create_flutter/presentation/blocs/auth/auth_state.dart';
-import 'package:teste_create_flutter/shared/components/custom_input.dart';
 import 'package:teste_create_flutter/shared/components/primary_button.dart';
 import 'package:teste_create_flutter/shared/components/navigation_text.dart';
 import 'package:teste_create_flutter/shared/components/title_subtitle_centralized.dart';
 import 'package:teste_create_flutter/shared/layouts/login_register_layout.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+
+import '../../shared/components/custom_input/custom_input.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
