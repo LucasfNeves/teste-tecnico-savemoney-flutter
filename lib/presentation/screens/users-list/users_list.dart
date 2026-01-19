@@ -18,15 +18,12 @@ class UsersList extends StatefulWidget {
 }
 
 class _UsersListState extends State<UsersList> {
-  late final UserBloc _userBloc;
-  late final UsersListBloc _usersListBloc;
+  final UserBloc _userBloc = UserBloc();
+  final UsersListBloc _usersListBloc = UsersListBloc();
 
   @override
   void initState() {
     super.initState();
-    _userBloc = UserBloc();
-    _usersListBloc = UsersListBloc();
-
     _loadInitialData();
   }
 
