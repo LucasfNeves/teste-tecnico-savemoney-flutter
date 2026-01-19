@@ -59,6 +59,11 @@ class AppTheme {
           fontWeight: FontWeight.w500,
           color: textPrimary,
         ),
+        titleSmall: GoogleFonts.poppins(
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+          color: textSecondary,
+        ),
         bodyLarge: GoogleFonts.poppins(fontSize: 16, color: textPrimary),
         bodyMedium: GoogleFonts.poppins(fontSize: 16, color: textSecondary),
         bodySmall: GoogleFonts.poppins(fontSize: 14, color: textSecondary),
@@ -72,7 +77,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(12),
           ),
           elevation: 0,
-          textStyle: GoogleFonts.inter(
+          textStyle: GoogleFonts.poppins(
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
@@ -86,7 +91,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          textStyle: GoogleFonts.inter(
+          textStyle: GoogleFonts.poppins(
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
@@ -115,15 +120,15 @@ class AppTheme {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: errorRed),
         ),
-        labelStyle: GoogleFonts.inter(color: textSecondary),
-        hintStyle: GoogleFonts.inter(color: textSecondary),
+        labelStyle: GoogleFonts.poppins(color: textSecondary),
+        hintStyle: GoogleFonts.poppins(color: textSecondary),
       ),
       appBarTheme: AppBarTheme(
         backgroundColor: backGroundAppBar,
         foregroundColor: white,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: GoogleFonts.inter(
+        titleTextStyle: GoogleFonts.poppins(
           fontSize: 20,
           fontWeight: FontWeight.w600,
           color: white,
