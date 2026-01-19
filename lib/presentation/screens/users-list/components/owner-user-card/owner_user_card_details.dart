@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:teste_create_flutter/domain/models/user_model.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:teste_create_flutter/core/theme/app_theme.dart';
@@ -7,6 +8,7 @@ import 'package:teste_create_flutter/presentation/blocs/user/user_bloc.dart';
 import 'package:teste_create_flutter/presentation/blocs/user/user_state.dart';
 import 'package:teste_create_flutter/presentation/blocs/user/user_event.dart';
 import 'package:teste_create_flutter/shared/components/modal_drag_handle.dart';
+import 'package:teste_create_flutter/shared/components/phone_areacode_input/models/phone_data.dart';
 import 'package:teste_create_flutter/presentation/screens/users-list/components/owner-user-card/components/owner_user_card_avatar.dart';
 import 'package:teste_create_flutter/presentation/screens/users-list/components/owner-user-card/owner-card-details/owner_user_card_form.dart';
 import 'package:teste_create_flutter/presentation/screens/users-list/components/owner-user-card/components/owner_user_card_actions.dart';
@@ -61,8 +63,8 @@ class _OwnerUserCardDetailsState extends State<OwnerUserCardDetails> {
 
   String? _userName;
   String? _userEmail;
-  List<Map<String, dynamic>>? _userPhones;
-  List<Map<String, dynamic>>? _currentPhones;
+  List<PhoneData>? _userPhones;
+  List<PhoneData>? _currentPhones;
   bool _shouldCloseOnNextSuccess = false;
 
   @override
@@ -90,14 +92,8 @@ class _OwnerUserCardDetailsState extends State<OwnerUserCardDetails> {
       setState(() {
         _userName = user.displayName;
         _userEmail = user.email;
-        _userPhones = user.telephones
-            .map((t) => {
-                  'area_code': t.areaCode.toString(),
-                  'number': t.number.toString(),
-                })
-            .toList();
-        _currentPhones = _userPhones;
-
+        _userPhones = user.telephones.toPhoneDataList();
+        _currentPhones = List.from(_userPhones!);
         _nameController.text = user.displayName;
         _emailController.text = user.email;
       });
@@ -112,7 +108,7 @@ class _OwnerUserCardDetailsState extends State<OwnerUserCardDetails> {
     final data = <String, dynamic>{
       'name': _nameController.text,
       'email': _emailController.text,
-      'telephones': _currentPhones,
+      'telephones': _currentPhones!.toJsonList(),
     };
 
     if (_passwordController.text.isNotEmpty) {

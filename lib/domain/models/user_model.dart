@@ -1,3 +1,4 @@
+import 'package:teste_create_flutter/shared/components/phone_areacode_input/models/phone_data.dart';
 import 'package:teste_create_flutter/shared/utils/strings_utils.dart';
 
 class User {
@@ -69,5 +70,20 @@ class Telephone {
       return '${numStr.substring(0, 1)} ${numStr.substring(1, 5)}-${numStr.substring(5)}';
     }
     return numStr;
+  }
+}
+
+extension TelephoneExtensions on Telephone {
+  PhoneData toPhoneData() {
+    return PhoneData(
+      areaCode: areaCode.toString(),
+      number: number.toString(),
+    );
+  }
+}
+
+extension TelephoneListExtensions on List<Telephone> {
+  List<PhoneData> toPhoneDataList() {
+    return map((tel) => tel.toPhoneData()).toList();
   }
 }

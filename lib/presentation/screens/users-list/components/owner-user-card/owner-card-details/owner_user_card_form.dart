@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:teste_create_flutter/shared/components/multiple_phone_input.dart';
-
-import '../../../../../../shared/components/custom_input/custom_input.dart';
+import 'package:teste_create_flutter/shared/components/phone_areacode_input/models/phone_data.dart';
+import 'package:teste_create_flutter/shared/components/custom_input/custom_input.dart';
 
 class OwnerUserCardForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController nameController;
   final TextEditingController emailController;
   final TextEditingController passwordController;
-  final List<Map<String, dynamic>> userPhones;
-  final Function(List<Map<String, dynamic>>) onPhonesChanged;
+
+  final List<PhoneData> userPhones;
+
+  final ValueChanged<List<PhoneData>> onPhonesChanged;
 
   const OwnerUserCardForm({
     super.key,
@@ -53,6 +55,7 @@ class _OwnerUserCardFormState extends State<OwnerUserCardForm> {
           const SizedBox(height: 20),
           MultiplePhoneInput(
             initialPhones: widget.userPhones,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             onChanged: widget.onPhonesChanged,
           ),
         ],

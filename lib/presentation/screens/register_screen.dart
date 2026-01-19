@@ -1,3 +1,5 @@
+// lib/presentation/screens/register_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teste_create_flutter/presentation/blocs/register/register_bloc.dart';
@@ -8,10 +10,10 @@ import 'package:teste_create_flutter/shared/components/primary_button.dart';
 import 'package:teste_create_flutter/shared/components/navigation_text.dart';
 import 'package:teste_create_flutter/shared/components/title_subtitle_centralized.dart';
 import 'package:teste_create_flutter/shared/layouts/login_register_layout.dart';
+import 'package:teste_create_flutter/shared/components/phone_areacode_input/models/phone_data.dart';
+import 'package:teste_create_flutter/shared/components/custom_input/custom_input.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-
-import '../../shared/components/custom_input/custom_input.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -25,7 +27,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _nameController = TextEditingController();
-  List<Map<String, dynamic>> _phones = [];
+
+  List<PhoneData> _phones = [];
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -35,8 +39,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
           if (state is RegisterSuccess) {
             showTopSnackBar(
               Overlay.of(context),
-              CustomSnackBar.success(
-                  message: "Cadastro realizado com sucesso!"),
+              const CustomSnackBar.success(
+                message: "Cadastro realizado com sucesso!",
+              ),
             );
             Navigator.pushReplacementNamed(context, '/login');
           } else if (state is RegisterError) {
@@ -76,6 +81,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SizedBox(height: 20),
                 MultiplePhoneInput(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   onChanged: (phones) {
                     setState(() {
                       _phones = phones;
@@ -99,7 +105,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         name: _nameController.text.trim(),
                                         email: _emailController.text.trim(),
                                         password: _passwordController.text,
-                                        telephones: _phones,
+                                        telephones: _phones.toJsonList(),
                                       ),
                                     );
                               }

@@ -94,6 +94,29 @@ class ValidatorsCustomInput {
     return null;
   }
 
+  static String? phoneWithAreaCode(String? areaCode, String? number) {
+    // Validações específicas para campos separados
+    if ((areaCode == null || areaCode.isEmpty) &&
+        (number == null || number.isEmpty)) {
+      return 'O telefone é obrigatório.';
+    }
+
+    if (areaCode == null || areaCode.isEmpty) {
+      return 'O DDD é obrigatório.';
+    }
+
+    if (areaCode.length < 2) {
+      return 'O DDD deve ter 2 dígitos.';
+    }
+
+    if (number == null || number.isEmpty) {
+      return 'O número é obrigatório.';
+    }
+
+    final fullPhone = areaCode + number.replaceAll(RegExp(r'\D'), '');
+    return phone(fullPhone);
+  }
+
   static String? isNumber(String? value, {String? message}) {
     final requiredError = required(value);
     if (requiredError != null) return requiredError;
